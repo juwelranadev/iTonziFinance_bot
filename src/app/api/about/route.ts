@@ -77,15 +77,15 @@ const defaultAboutData: Omit<IAbout, 'lastUpdated'> = {
         }
     ],
     platformInfo: {
-        title: 'Welcome to ClickMasterAds',
+        title: 'Welcome to iTonziFinance',
         description: 'Your trusted platform for earning through ad engagement',
         bannerImage: '/images/platform-banner.jpg',
         ctaTitle: 'Ready to Start Earning?',
-        ctaDescription: 'Join thousands of users who are already earning with ClickMasterAds!'
+        ctaDescription: 'Join thousands of users who are already earning with iTonziFinance!'
     },
     contact: {
-        telegram: 'https://t.me/clickmasterads',
-        email: 'support@clickmasterads.com'
+        telegram: 'https://t.me/iTonziFinance',
+        email: 'support@itonzifinance.com'
     }
 };
 
