@@ -77,7 +77,7 @@ const defaultAboutData: Omit<IAbout, 'lastUpdated'> = {
         }
     ],
     platformInfo: {
-        title: 'Welcome to iTonziFinance',
+        title: 'Welcome to iTonziFinanceBot',
         description: 'Your trusted platform for earning through ad engagement',
         bannerImage: '/images/platform-banner.jpg',
         ctaTitle: 'Ready to Start Earning?',
