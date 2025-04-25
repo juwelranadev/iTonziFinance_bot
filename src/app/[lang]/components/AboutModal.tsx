@@ -19,9 +19,9 @@ export default function AboutModal({
     isOpen, 
     onClose,
     dictionary = {
-        about: 'About ClickMaster',
+        about: 'About iTonziFi',
         close: 'Close',
-        welcome: 'Welcome to ClickMaster',
+        welcome: 'Welcome to iTonziFinance_bot',
         description: 'Your trusted platform for earning rewards by watching ads',
         features: 'Features',
         howItWorks: 'How It Works',
@@ -129,7 +129,7 @@ export default function AboutModal({
                                         @iTonziFinanceChannel  </a></p>
 
                                         <p> Admin/Ceo <a href="https://t.me/zikrulislam84" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
-                                        @iTonziFinanceChannel </a></p>
+                                        @ZIKRULISLAM </a></p>
 
                                         devoloper <a href="https://t.me/MdRijonHossainJibon" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
                                         @MdRijonHossainJibon
