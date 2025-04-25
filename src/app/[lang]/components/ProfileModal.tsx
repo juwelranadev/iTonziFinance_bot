@@ -49,7 +49,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                 <div className="sticky top-0 z-10 bg-gray-900 border-b border-gray-800">
                     <div className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-white">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-white-500 to-indigo-500 flex items-center justify-center text-white">
                                 <span className="text-xl">👤</span>
                             </div>
                             <div>

@@ -138,7 +138,7 @@ export default function MainContent() {
         <div className="container mx-auto px-2 sm:px-4 py-3 sm:py-8 max-w-4xl flex flex-col items-center justify-center">
             <div className="bg-gray-800/95 backdrop-blur-md border border-gray-700 rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-6 space-y-3 sm:space-y-6 w-full text-center">
                 <h1 className="text-xl sm:text-3xl font-bold text-white rgb-animate py-2 sm:py-4 px-3 sm:px-6 rounded-xl shadow-lg text-center leading-tight">
-                    Watch Ads & Earn Rewards
+                    iTonziFi
                 </h1>
                 <p className="text-sm sm:text-lg text-white bg-gradient-to-r from-emerald-600 to-teal-800 py-2 sm:py-4 px-3 sm:px-6 rounded-xl shadow-lg text-center leading-relaxed">
                     Click the button below to watch a video ad and earn your reward!
@@ -150,7 +150,7 @@ export default function MainContent() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4 bg-gray-900/50 p-4 rounded-xl">
+                <div className="grid grid-cols-2 gap-4 bg-black-900/50 p-4 rounded-xl">
                     <div className="text-base sm:text-xl font-bold text-yellow-400 text-center">
                         Balance
                         <div className="text-lg sm:text-2xl">${balance}</div>
