@@ -125,11 +125,11 @@ export default function AboutModal({
                                 </div>
                                 <div>
                                 <p>  <p className="text-gray-300">Need help? Contact our support team through Telegram </p>
-                                   channel <a href="https://t.me/Nur6432" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
-                                        @Nur islam Roman </a></p>
+                                   channel <a href="https://t.me/iTonziFinanceChannel" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
+                                        @iTonziFinanceChannel  </a></p>
 
-                                        <p> Admin/Ceo <a href="https://t.me/nurislamroman" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
-                                        @Nur islam Roman </a></p>
+                                        <p> Admin/Ceo <a href="https://t.me/zikrulislam84" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
+                                        @iTonziFinanceChannel </a></p>
 
                                         devoloper <a href="https://t.me/MdRijonHossainJibon" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
                                         @MdRijonHossainJibon
