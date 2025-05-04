@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import crypto from 'crypto';
-import AirdropCircle from './AirdropCircle';
 
 // Add date formatting helper
 const formatDate = (dateString: string | Date | undefined) => {
@@ -232,12 +231,6 @@ export default function ReferralModal({ isOpen, onClose }: ReferralModalProps) {
                                         {copied ? t('referral.copied') : t('referral.copy')}
                                     </button>
                                 </div>
-                            </div>
-
-                            {/* Airdrop Circle Section */}
-                            <div className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/50 flex flex-col items-center">
-                                <AirdropCircle />
-                                <p className="text-sm text-gray-400 mt-2">Share and earn rewards!</p>
                             </div>
 
                             {/* Share Buttons - Telegram Mini App style */}
