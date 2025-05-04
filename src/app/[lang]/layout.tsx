@@ -22,8 +22,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ClickMasterAds - Earn by Watching",
-  description: "Earn rewards by watching ads with ClickMasterAds",
+  title: "iTonziFinance - Earn by Watching",
+  description: "Earn rewards by watching ads with iTonziFinance",
 };
 
  

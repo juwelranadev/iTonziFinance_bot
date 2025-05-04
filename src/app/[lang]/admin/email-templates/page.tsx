@@ -98,8 +98,8 @@ export default function EmailTemplatesPage() {
     {
       id: 'welcome',
       name: 'Welcome Email',
-      subject: 'Welcome to ClickMasterAds!',
-      content: 'Hello {{username}},\n\nWelcome to ClickMasterAds! We\'re excited to have you on board.',
+      subject: 'Welcome to iTonziFinance!',
+      content: 'Hello {{username}},\n\nWelcome to iTonziFinance! We\'re excited to have you on board.',
       variables: ['username']
     },
     {

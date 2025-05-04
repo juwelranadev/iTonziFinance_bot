@@ -19,40 +19,40 @@ export default function AboutModal({
     isOpen, 
     onClose,
     dictionary = {
-        about: 'About iTonziFi',
+        about: 'About iTonziFinance',
         close: 'Close',
-        welcome: 'Welcome to iTonziFinance_bot',
-        description: 'Your trusted platform for earning rewards by watching ads',
-        features: 'Features',
-        howItWorks: 'How It Works',
-        support: 'Support',
+        welcome: 'Welcome to iTonziFinance',
+        description: 'Your premier platform for earning rewards through ad engagement',
+        features: 'Key Features',
+        howItWorks: 'Getting Started',
+        support: 'Contact Support',
         version: 'Version'
     }
 }: AboutModalProps) {
     if (!isOpen) return null;
 
     const features = [
-        { icon: '💰', title: 'Earn Rewards', description: 'Get paid for watching advertisements' },
-        { icon: '🎯', title: 'Daily Tasks', description: 'Complete tasks for bonus earnings' },
-        { icon: '🔄', title: 'Auto-Play', description: 'Automated ad viewing experience' },
-        { icon: '📊', title: 'Statistics', description: 'Track your earnings and progress' },
-        { icon: '🏆', title: 'Achievements', description: 'Unlock rewards for milestones' },
-        { icon: '💳', title: 'Easy Withdrawals', description: 'Multiple payment options available' }
+        { icon: '💰', title: 'Reward System', description: 'Earn tokens by watching advertisements' },
+        { icon: '🎯', title: 'Daily Missions', description: 'Complete daily tasks for extra rewards' },
+        { icon: '🔄', title: 'Smart Automation', description: 'Seamless ad viewing experience' },
+        { icon: '📊', title: 'Analytics', description: 'Monitor your earnings and performance' },
+        { icon: '🏆', title: 'Milestones', description: 'Achieve goals and unlock bonuses' },
+        { icon: '💳', title: 'Flexible Payouts', description: 'Multiple withdrawal methods' }
     ];
 
     const howItWorks = [
-        'Sign in with your Telegram account',
-        'Watch ads to earn rewards',
-        'Complete daily tasks for bonuses',
-        'Track your progress and achievements',
-        'Withdraw earnings when ready'
+        'Connect your Telegram account',
+        'Start watching ads to earn',
+        'Complete daily missions',
+        'Monitor your progress',
+        'Withdraw your earnings'
     ];
 
     return (
         <div className="fixed inset-0 z-50 bg-gray-900 md:bg-black/50 md:backdrop-blur-sm md:p-4 md:flex md:items-center md:justify-center">
             <div className="relative h-full md:h-auto w-full md:max-w-2xl md:rounded-2xl md:border md:border-gray-800 bg-gray-900 shadow-xl overflow-hidden">
                 {/* Header */}
-                <div className="sticky top-0 z-10 p-4 border-b border-gray-800 bg-gradient-to-r from-purple-500 to-indigo-500">
+                <div className="sticky top-0 z-10 p-4 border-b border-gray-800 bg-gradient-to-r from-blue-500 to-cyan-500">
                     <div className="flex items-center justify-between">
                         <h2 className="text-xl font-bold text-white">{dictionary.about}</h2>
                         <button 
@@ -68,7 +68,7 @@ export default function AboutModal({
                 <div className="p-4 space-y-8 overflow-y-auto max-h-[calc(100vh-4rem)] md:max-h-[80vh]">
                     {/* Welcome Section */}
                     <div className="text-center space-y-2">
-                        <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">
+                        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                             {dictionary.welcome}
                         </h1>
                         <p className="text-gray-400">{dictionary.description}</p>
@@ -81,10 +81,10 @@ export default function AboutModal({
                             {features.map((feature, index) => (
                                 <div 
                                     key={index}
-                                    className="p-4 rounded-xl bg-gray-800/30 border border-gray-700/50 hover:border-purple-500/30 transition-colors"
+                                    className="p-4 rounded-xl bg-gray-800/30 border border-gray-700/50 hover:border-blue-500/30 transition-colors"
                                 >
                                     <div className="flex items-start gap-3">
-                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-xl">
+                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-xl">
                                             {feature.icon}
                                         </div>
                                         <div>
@@ -106,7 +106,7 @@ export default function AboutModal({
                                     key={index}
                                     className="flex items-center gap-4 p-3 rounded-lg bg-gray-800/30"
                                 >
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-white font-medium">
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white font-medium">
                                         {index + 1}
                                     </div>
                                     <p className="text-gray-300">{step}</p>
@@ -120,18 +120,18 @@ export default function AboutModal({
                         <h3 className="text-lg font-semibold text-white">{dictionary.support}</h3>
                         <div className="p-4 rounded-xl bg-gray-800/30 border border-gray-700/50">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-xl">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-xl">
                                     💬
                                 </div>
                                 <div>
                                 <p>  <p className="text-gray-300">Need help? Contact our support team through Telegram </p>
-                                   channel <a href="https://t.me/iTonziFinanceChannel" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
+                                   channel <a href="https://t.me/iTonziFinanceChannel" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
                                         @iTonziFinanceChannel  </a></p>
 
-                                        <p> Admin/Ceo <a href="https://t.me/zikrulislam84" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
+                                        <p> Admin/Ceo <a href="https://t.me/zikrulislam84" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
                                         @ZIKRULISLAM </a></p>
 
-                                        devoloper <a href="https://t.me/MdRijonHossainJibon" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">
+                                        devoloper <a href="https://t.me/MdRijonHossainJibon" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
                                         @MdRijonHossainJibon
 
 

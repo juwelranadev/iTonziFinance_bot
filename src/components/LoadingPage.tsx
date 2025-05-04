@@ -57,7 +57,7 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
       </div>
       
       {/* Title */}
-      <h1 className="text-2xl font-bold text-white mb-6">ClickMasterAds</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">iTonziFinance</h1>
       
       {/* Progress bar */}
       <div className="w-full max-w-md px-4">

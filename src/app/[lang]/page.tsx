@@ -233,9 +233,9 @@ export default function Home() {
                 isOpen={isAboutModalOpen}
                 onClose={() => setIsAboutModalOpen(false)}
                 dictionary={{
-                    about: 'About ClickMaster',
+                    about: 'About iTonziFinance',
                     close: 'Close',
-                    welcome: 'Welcome to ClickMaster',
+                    welcome: 'Welcome to iTonziFinance',
                     description: 'Your trusted platform for earning rewards by watching ads',
                     features: 'Features',
                     howItWorks: 'How It Works',
