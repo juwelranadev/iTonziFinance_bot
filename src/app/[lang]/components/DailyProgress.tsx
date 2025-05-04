@@ -55,42 +55,42 @@ export default function DailyProgress() {
     ];
 
     return (
-        <div className="bg-gray-900/50 rounded-xl p-4">
+        <div className="bg-white rounded-xl p-4 shadow-lg">
             <div className="flex justify-between items-center mb-2">
-                <div className="text-sm text-gray-400">  {t('navigation.dailyProgress')} </div>
-                <div className="text-sm text-emerald-400">
+                <div className="text-sm font-bold text-black">  {t('navigation.dailyProgress')} </div>
+                <div className="text-sm font-bold text-black">
                     {adsWatched}/{ 500}  {t('navigation.ads')}
                 </div>
             </div>
-            <div className="h-2 bg-gray-700 rounded-full overflow-hidden mb-3">
+            <div className="h-2 bg-gray-200 rounded-full overflow-hidden mb-3">
                 <div
-                    className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-300 ease-out"
+                    className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-300 ease-out"
                     style={{ width: `${progress}%` }}
                 />
             </div>
             <div className="text-center">
                 {adsWatched >= 500 && (
-                    <div className="text-red-400 font-bold mb-2 animate-pulse">
+                    <div className="text-red-600 font-bold mb-2 animate-pulse">
                         Daily Limit Reached!
                     </div>
                 )}
-                <div className="flex justify-center gap-2  mt-5">
+                <div className="flex justify-center gap-2 mt-5">
                     {timeUnits.map((unit, index) => (
                         <div
                             key={unit.label}
-                            className="flex flex-col items-center bg-gray-800/50 rounded-lg p-2 min-w-[60px]"
+                            className="flex flex-col items-center bg-gray-100 rounded-lg p-2 min-w-[60px]"
                         >
-                            <div className="text-lg font-bold text-amber-400">
+                            <div className="text-lg font-bold text-black">
                                 {unit.value.toString().padStart(2, '0')}
                             </div>
-                            <div className="text-xs text-gray-400"> {t('navigation.'+unit.label)}</div>
+                            <div className="text-xs font-bold text-gray-600"> {t('navigation.'+unit.label)}</div>
                             {index < timeUnits.length - 1 && (
-                                <div className="absolute -right-1 top-1/2 -translate-y-1/2 text-gray-500">:</div>
+                                <div className="absolute -right-1 top-1/2 -translate-y-1/2 text-gray-400">:</div>
                             )}
                         </div>
                     ))}
                 </div>
-                <div className="text-xs text-gray-400 mt-2">
+                <div className="text-sm font-bold text-black mt-2">
                     {t('navigation.untilNextReset')}
                 </div>
             </div>
