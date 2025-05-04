@@ -234,43 +234,46 @@ export default function ReferralModal({ isOpen, onClose }: ReferralModalProps) {
                                 </div>
                             </div>
 
+                            {/* Airdrop Circle Section */}
+                            <div className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/50 flex flex-col items-center">
+                                <AirdropCircle />
+                                <p className="text-sm text-gray-400 mt-2">Share and earn rewards!</p>
+                            </div>
+
                             {/* Share Buttons - Telegram Mini App style */}
                             <div className="bg-gray-800/30 rounded-xl p-4 border border-gray-700/50">
                                 <h3 className="text-lg font-semibold text-white mb-3">{t('referral.share')}</h3>
-                                <div className="flex flex-col items-center gap-4">
-                                    <AirdropCircle />
-                                    <div className="flex justify-center gap-4">
-                                        <motion.button
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={() => shareToSocial('telegram')}
-                                            className="w-12 h-12 rounded-full bg-[#0088cc] flex items-center justify-center text-white shadow-lg"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.335c-.146.658-.537.818-1.084.51l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.534-.196 1.006.128.832.941z"/>
-                                            </svg>
-                                        </motion.button>
-                                        <motion.button
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={() => shareToSocial('whatsapp')}
-                                            className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.508 16.255c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.423-.101.828z"/>
-                                            </svg>
-                                        </motion.button>
-                                        <motion.button
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={() => shareToSocial('twitter')}
-                                            className="w-12 h-12 rounded-full bg-[#1DA1F2] flex items-center justify-center text-white shadow-lg"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l.01.475c0 4.85-3.692 10.43-10.43 10.43-1.984 0-3.83-.58-5.35-1.574.275.032.542.048.824.048 1.61 0 3.092-.548 4.27-1.47-1.504-.028-2.774-1.02-3.21-2.38.21.036.42.06.645.06.312 0 .614-.042.9-.116-1.53-1.574-.028-2.774-1.704-2.758-3.37v-.042c.464.258.995.42 1.56.43-.922-.616-1.53-1.666-1.53-2.855 0-.63.17-1.22.466-1.74 1.695 2.08 4.23 3.446 7.087 3.59-.06-.252-.09-.516-.09-.783 0-1.9 1.54-3.44 3.44-3.44.99 0 1.885.42 2.513 1.09.784-.154 1.52-.44 2.184-.834-.258.805-.805 1.48-1.518 1.79z"/>
-                                            </svg>
-                                        </motion.button>
-                                    </div>
+                                <div className="flex justify-center gap-4">
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => shareToSocial('telegram')}
+                                        className="w-12 h-12 rounded-full bg-[#0088cc] flex items-center justify-center text-white shadow-lg"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.335c-.146.658-.537.818-1.084.51l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.534-.196 1.006.128.832.941z"/>
+                                        </svg>
+                                    </motion.button>
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => shareToSocial('whatsapp')}
+                                        className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.508 16.255c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.423-.101.828z"/>
+                                        </svg>
+                                    </motion.button>
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => shareToSocial('twitter')}
+                                        className="w-12 h-12 rounded-full bg-[#1DA1F2] flex items-center justify-center text-white shadow-lg"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l.01.475c0 4.85-3.692 10.43-10.43 10.43-1.984 0-3.83-.58-5.35-1.574.275.032.542.048.824.048 1.61 0 3.092-.548 4.27-1.47-1.504-.028-2.774-1.02-3.21-2.38.21.036.42.06.645.06.312 0 .614-.042.9-.116-1.53-1.574-.028-2.774-1.704-2.758-3.37v-.042c.464.258.995.42 1.56.43-.922-.616-1.53-1.666-1.53-2.855 0-.63.17-1.22.466-1.74 1.695 2.08 4.23 3.446 7.087 3.59-.06-.252-.09-.516-.09-.783 0-1.9 1.54-3.44 3.44-3.44.99 0 1.885.42 2.513 1.09.784-.154 1.52-.44 2.184-.834-.258.805-.805 1.48-1.518 1.79z"/>
+                                        </svg>
+                                    </motion.button>
                                 </div>
                             </div>
 
