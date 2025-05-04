@@ -79,23 +79,21 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
       name: 'bKash',
       image: 'https://www.logo.wine/a/logo/BKash/BKash-Icon-Logo.wine.svg',
       color: 'rgb(220, 53, 69)',
-      status: 'suspended',
+      status: 'active',
     },
     {
       id: 'nagad',
       name: 'Nagad',
       image: 'https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png',
       color: 'rgb(255, 103, 30)',
-      status: 'suspended',
-      message: 'Temporarily unavailable due to maintenance',
+      status: 'active',
     },
     {
       id: 'rocket',
       name: 'Rocket',
       image: '/images/rocket.png',
       color: 'rgb(82, 43, 131)',
-      status: 'suspended',
-      message: 'Service currently not available',
+      status: 'active',
     },
   ];
 
