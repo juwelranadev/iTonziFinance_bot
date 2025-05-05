@@ -7,41 +7,28 @@ import { authOptions } from '@/lib/authOptions';
 import WithdrawalHistory from '@/models/WithdrawalHistory';
 
 // Constants for conversion and fees
-const USD_TO_BDT_RATE = 100; // 1 USD = 100 BDT
-const MIN_CRYPTO_AMOUNT = 0.5;
-const MAX_CRYPTO_AMOUNT = 50; // Maximum 50 USDT withdrawal
+const MIN_CRYPTO_AMOUNT = 50; // Minimum withdrawal amount
+const MAX_CRYPTO_AMOUNT = 1000; // Maximum withdrawal amount
+const USD_TO_BDT_RATE = 110; // 1 USD = 110 BDT
 const MIN_BDT_AMOUNT = 50;
 const MAX_BDT_AMOUNT = 25000;
 
-// Fee structure
-const FEES = {
-    bkash: { percentage: 1.5, fixed: 0 },
-    nagad: { percentage: 1.5, fixed: 0 },
-    rocket: { percentage: 1.5, fixed: 0 },
-    binance: { percentage: 0, fixed: 1 }, // 1 USDT fixed fee
-    bitget: { percentage: 0, fixed: 1 }, // 1 USDT fixed fee
-    tron: { percentage: 0, fixed: 1 }, // 1 USDT fixed fee
-    eth: { percentage: 0, fixed: 15 }, // 15 USDT fixed fee
-    btc: { percentage: 0, fixed: 0.0005 } // 0.0005 BTC fixed fee
+// Fee structure for different payment methods
+const FEE_STRUCTURE = {
+    bdt: { percentage: 1, fixed: 0 }, // 1% fee
+    bank: { percentage: 1, fixed: 0 }, // 1% fee
+    bkash: { percentage: 1, fixed: 0 }, // 1% fee
+    nagad: { percentage: 1, fixed: 0 }, // 1% fee
+    rocket: { percentage: 1, fixed: 0 }, // 1% fee
+    upay: { percentage: 1, fixed: 0 }, // 1% fee
+    tap: { percentage: 1, fixed: 0 }, // 1% fee
 };
 
 // Helper function to calculate fee
-function calculateFee(amount: number, method: string): { fee: number; amountAfterFee: number } {
-    const feeStructure = FEES[method.toLowerCase() as keyof typeof FEES] || { percentage: 0, fixed: 0 };
+function calculateFee(amount: number, method: string): number {
+    const feeStructure = FEE_STRUCTURE[method as keyof typeof FEE_STRUCTURE] || FEE_STRUCTURE.bdt;
     const percentageFee = (amount * feeStructure.percentage) / 100;
-    const totalFee = percentageFee + feeStructure.fixed;
-    const amountAfterFee = amount - totalFee;
-    return { fee: totalFee, amountAfterFee };
-}
-
-// Helper function to convert USDT to BDT
-function convertUSDTtoBDT(usdtAmount: number): number {
-    return usdtAmount * USD_TO_BDT_RATE;
-}
-
-// Helper function to convert BDT to USDT
-function convertBDTtoUSDT(bdtAmount: number): number {
-    return bdtAmount / USD_TO_BDT_RATE;
+    return percentageFee + feeStructure.fixed;
 }
 
 // Helper function to validate Bangladeshi phone number
@@ -85,9 +72,9 @@ function validateCryptoAddress(address: string, method: string): boolean {
 
     return true; // For non-crypto methods
 }
+
 export async function GET() {
     try {
-
         await dbConnect();
 
         const session: any = await getServerSession(authOptions);
@@ -99,11 +86,10 @@ export async function GET() {
                 ...w._doc,
                 bdtAmount: w.method.toLowerCase() === 'bkash' || w.method.toLowerCase() === 'nagad'
                     ? w.amount
-                    : convertUSDTtoBDT(w.amount)
+                    : w.amount * USD_TO_BDT_RATE
             }));
             return NextResponse.json({ result: withdrawalsWithConversion });
         }
-
 
         if (session && session.user?.role === 'user') {
             const withdrawals = await WithdrawalHistory.find({ telegramId : session.user.telegramId }).sort({ createdAt: -1 });
@@ -111,13 +97,11 @@ export async function GET() {
                 ...w._doc,
                 bdtAmount: w.method.toLowerCase() === 'bkash' || w.method.toLowerCase() === 'nagad'
                     ? w.amount
-                    : convertUSDTtoBDT(w.amount)
+                    : w.amount * USD_TO_BDT_RATE
             }));
 
             return NextResponse.json({ result: withdrawalsWithConversion });
         }
-
-
 
     } catch (error: any) {
         console.error(error);
@@ -127,139 +111,81 @@ export async function GET() {
 
 export async function POST(req: Request) {
     try {
-        const session: any = await getServerSession(authOptions);
-        if (!session) {
+        const session = await getServerSession(authOptions);
+        if (!session?.user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        await dbConnect();
 
-        const data = await req.json();
-        const { method, amount, recipient, network } = data;
-
-        // Validate required fields
-        if (!method || !amount || !recipient) {
-            return NextResponse.json(
-                { error: 'Missing required fields' },
-                { status: 400 }
-            );
-        }
-
-        // Parse amount as float and validate
+        const { amount, method, recipient } = await req.json();
         const numAmount = parseFloat(amount);
+
         if (isNaN(numAmount) || numAmount <= 0) {
+            return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
+        }
+
+        if (numAmount < MIN_CRYPTO_AMOUNT) {
             return NextResponse.json(
-                { error: 'Invalid amount' },
+                { error: `Minimum withdrawal amount is ${MIN_CRYPTO_AMOUNT} BDT` },
                 { status: 400 }
             );
         }
 
-        // Validate recipient based on method
-        if (method === 'bkash' || method === 'nagad' || method === 'rocket') {
-            if (!validateBangladeshiPhoneNumber(recipient)) {
-                return NextResponse.json(
-                    { error: 'Invalid phone number format' },
-                    { status: 400 }
-                );
-            }
-        } else if (!validateCryptoAddress(recipient, method)) {
+        if (numAmount > MAX_CRYPTO_AMOUNT) {
             return NextResponse.json(
-                { error: 'Invalid wallet address' },
+                { error: `Maximum withdrawal amount is ${MAX_CRYPTO_AMOUNT} BDT` },
                 { status: 400 }
             );
         }
 
-        const isCryptoPayment = !['bkash', 'nagad', 'rocket'].includes(method.toLowerCase());
-        const amountInUSDT = isCryptoPayment ? numAmount : convertBDTtoUSDT(numAmount);
+        await dbConnect();
+        const user = await User.findOne({ email: session.user.email });
 
-        // Calculate fees
-        const { fee, amountAfterFee } = calculateFee(
-            isCryptoPayment ? numAmount : convertBDTtoUSDT(numAmount),
-            method
-        );
-
-        // Validate amount based on payment method
-        if (isCryptoPayment) {
-            if (amountInUSDT < MIN_CRYPTO_AMOUNT) {
-                return NextResponse.json(
-                    { error: `Minimum withdrawal amount is ${MIN_CRYPTO_AMOUNT} USDT` },
-                    { status: 400 }
-                );
-            }
-            if (amountInUSDT > MAX_CRYPTO_AMOUNT) {
-                return NextResponse.json(
-                    { error: `Maximum withdrawal amount is ${MAX_CRYPTO_AMOUNT} USDT` },
-                    { status: 400 }
-                );
-            }
-        } else {
-            if (numAmount < MIN_BDT_AMOUNT) {
-                return NextResponse.json(
-                    { error: `Minimum withdrawal amount is ${MIN_BDT_AMOUNT} BDT` },
-                    { status: 400 }
-                );
-            }
-            if (numAmount > MAX_BDT_AMOUNT) {
-                return NextResponse.json(
-                    { error: `Maximum withdrawal amount is ${MAX_BDT_AMOUNT} BDT` },
-                    { status: 400 }
-                );
-            }
-        }
-
-        const user = await User.findOne({ telegramId : session.user.telegramId })
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
-     
 
-        // Check if user has sufficient balance (including fee)
-        if (user.balance < (amountInUSDT + fee)) {
+        const fee = calculateFee(numAmount, method);
+        const totalAmount = numAmount + fee;
+
+        if (user.balance < totalAmount) {
             return NextResponse.json(
-                { error: 'Insufficient balance to cover amount and fees' },
+                { error: 'Insufficient balance' },
                 { status: 400 }
             );
         }
 
-        // Create withdrawal history record
         const withdrawal = await WithdrawalHistory.create({
-            telegramId: user.telegramId,
             userId: user._id,
-            activityType: 'withdrawal_request',
-            amount: amountInUSDT,
+            amount: numAmount,
             method,
             recipient,
             status: 'pending',
-            description: `Withdrawal request of ${numAmount} ${isCryptoPayment ? 'USDT' : 'BDT'} via ${method}`,
+            description: `Withdrawal request of ${numAmount} BDT via ${method}`,
             metadata: {
-                ipAddress: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip'),
-                deviceInfo: req.headers.get('user-agent'),
-                network,
-                originalAmount: numAmount,
-                currency: isCryptoPayment ? 'USDT' : 'BDT',
+                ipAddress: req.headers.get('x-forwarded-for') || 'unknown',
+                deviceInfo: req.headers.get('user-agent') || 'unknown',
                 fee,
-                amountAfterFee,
-                feeType: isCryptoPayment ? 'fixed' : 'percentage'
+                amountAfterFee: numAmount,
+                feeType: 'percentage'
             }
         });
 
-        // Update user balance (in USDT, including fee)
-        await User.findOneAndUpdate({ telegramId : session.user.telegramId  }, {
-            $inc: { balance: -(amountInUSDT + fee) }
-        }, { new: true });
+        // Update user balance
+        await User.findByIdAndUpdate(user._id, {
+            $inc: { balance: -totalAmount }
+        });
 
         return NextResponse.json({
-            message: 'Withdrawal request submitted successfully',
-            withdrawal: {
-                ...withdrawal.toObject(),
-                fee,
-                amountAfterFee,
-                bdtAmount: isCryptoPayment ? convertUSDTtoBDT(amountInUSDT) : numAmount,
-                bdtFee: isCryptoPayment ? convertUSDTtoBDT(fee) : (fee * USD_TO_BDT_RATE)
-            }
+            success: true,
+            withdrawal,
+            newBalance: user.balance - totalAmount
         });
-    } catch (error: any) {
-        console.error(error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        console.error('Withdrawal error:', error);
+        return NextResponse.json(
+            { error: 'Internal server error' },
+            { status: 500 }
+        );
     }
 }
 
@@ -299,8 +225,8 @@ export async function PUT(req: Request) {
             recipient: withdrawal.recipient,
             status,
             description: status === 'approved' 
-                ? `Withdrawal request approved for ${withdrawal.amount} USDT via ${withdrawal.method}`
-                : `Withdrawal request rejected for ${withdrawal.amount} USDT via ${withdrawal.method}`,
+                ? `Withdrawal request approved for ${withdrawal.amount} BDT via ${withdrawal.method}`
+                : `Withdrawal request rejected for ${withdrawal.amount} BDT via ${withdrawal.method}`,
             metadata: {
                 adminId: session.user._id,
                 reason,
@@ -350,7 +276,7 @@ export async function DELETE(req: Request) {
             method: withdrawal.method,
             recipient: withdrawal.recipient,
             status: 'rejected',
-            description: `Withdrawal request cancelled by user for ${withdrawal.amount} USDT via ${withdrawal.method}`,
+            description: `Withdrawal request cancelled by user for ${withdrawal.amount} BDT via ${withdrawal.method}`,
             metadata: {
                 reason: 'User cancelled withdrawal',
                 ipAddress: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip'),
@@ -358,7 +284,7 @@ export async function DELETE(req: Request) {
             }
         });
 
-        // Refund the USDT amount to user's balance
+        // Refund the BDT amount to user's balance
         await User.findByIdAndUpdate(withdrawal.userId, {
             $inc: { balance: withdrawal.amount }
         });
@@ -368,7 +294,7 @@ export async function DELETE(req: Request) {
         return NextResponse.json({
             message: 'Withdrawal cancelled successfully',
             refundedAmount: withdrawal.amount,
-            refundedAmountBDT: convertUSDTtoBDT(withdrawal.amount)
+            refundedAmountBDT: withdrawal.amount * USD_TO_BDT_RATE
         });
     } catch (error) {
         console.error(error);

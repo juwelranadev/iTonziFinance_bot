@@ -150,12 +150,12 @@ export default function MainContent() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4 bg-black-900/50 p-4 rounded-xl">
-                    <div className="text-base sm:text-xl font-bold text-yellow-400 text-center">
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="text-base sm:text-xl font-bold text-yellow-400 text-center bg-black p-4 rounded-xl">
                         Balance
                         <div className="text-lg sm:text-2xl">${balance}</div>
                     </div>
-                    <div className="text-base sm:text-xl font-bold text-emerald-400 text-center">
+                    <div className="text-base sm:text-xl font-bold text-emerald-400 text-center bg-white p-4 rounded-xl">
                         Total Ads
                         <div className="text-lg sm:text-2xl">{adCount}</div>
                     </div>

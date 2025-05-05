@@ -9,7 +9,6 @@ import ProfileModal from './components/ProfileModal';
 import UserStats from './components/UserStats';
 import DailyProgress from './components/DailyProgress';
 import BottomNavigation from './components/BottomNavigation';
-import AirdropButton from '@/components/AirdropButton';
 
 import ReferralModal from './components/ReferralModal';
 
@@ -166,11 +165,11 @@ export default function Home() {
                     <DailyProgress />
 
                     {/* Watch Ads Button */}
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col items-center gap-4 w-full">
                         <button
                             onClick={handleWatchAd}
-                             disabled={ Number(user?.adsWatched) >= 500}
-                            className="relative overflow-hidden group bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={ Number(user?.adsWatched) >= 500}
+                            className="w-full relative overflow-hidden group bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <div className="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-all duration-300"></div>
                             <div className="flex items-center space-x-2">
@@ -216,27 +215,27 @@ export default function Home() {
                 onRules={() => setIsRulesModalOpen(true)}
                 onAbout={() => setIsAboutModalOpen(true)}
                 onSupport={() =>  setIsReferralModalOpen(true)}
-            />
 
-            {/* Airdrop Button */}
-            <AirdropButton />
+            />
 
             {/* Modals */}
             <TopEarnersModal
                 isOpen={isTopEarnersModalOpen}
                 onClose={() => setIsTopEarnersModalOpen(false)}
+
             />
             <RulesModal
                 isOpen={isRulesModalOpen}
                 onClose={() => setIsRulesModalOpen(false)}
+
             />
             <AboutModal
                 isOpen={isAboutModalOpen}
                 onClose={() => setIsAboutModalOpen(false)}
                 dictionary={{
-                    about: 'About iTonziFinance',
+                    about: 'About ClickMaster',
                     close: 'Close',
-                    welcome: 'Welcome to iTonziFinance',
+                    welcome: 'Welcome to ClickMaster',
                     description: 'Your trusted platform for earning rewards by watching ads',
                     features: 'Features',
                     howItWorks: 'How It Works',
@@ -249,6 +248,7 @@ export default function Home() {
             <WithdrawalModal
                 isOpen={isWithdrawalModalOpen}
                 onClose={() => setIsWithdrawalModalOpen(false)}
+
             />
 
   

@@ -129,7 +129,7 @@ export default function AuthPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#0B0E11] via-[#1E2026] to-[#0B0E11] p-4">
       {/* Logo and Title */}
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold text-white mb-2">iTonziFinance</h1>
+        <h1 className="text-2xl font-bold text-white mb-2">ClickMasterAds</h1>
         <p className="text-gray-400">Welcome back! Please sign in to continue</p>
       </div>
 
