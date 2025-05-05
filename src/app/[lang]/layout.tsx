@@ -8,8 +8,7 @@ import WrapperProvider from "@/provider/wrapperprovider";
 import Script from "next/script";
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from './components/ErrorFallback';
-import axios from "axios";
- 
+import MainLayout from '@/components/MainLayout';
  
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,13 +25,8 @@ export const metadata: Metadata = {
   description: "Earn rewards by watching ads with iTonziFinance",
 };
 
- 
-
-
-
 export default async function RootLayout({  children ,  params  } : {  children: React.ReactNode;  params: Promise<{ lang : string; }>;  } ) {
   const { lang } = await params;
- 
  
   return (
     <html lang= {lang} >
@@ -48,8 +42,9 @@ export default async function RootLayout({  children ,  params  } : {  children:
         <ErrorBoundary FallbackComponent={ErrorFallback}>
      
             <WrapperProvider lang={lang}>
-            
-              {children}
+              <MainLayout>
+                {children}
+              </MainLayout>
             </WrapperProvider>
         </ErrorBoundary>
       </body>
