@@ -121,6 +121,14 @@ export const authOptions: AuthOptions = {
                                 referralCode: uniqueReferralCode,
                                 referredBy: referralUser ? referralUser._id : null
                             });
+
+                            // Update referral count for the referrer
+                            if (referralUser) {
+                                referralUser.referralCount = (referralUser.referralCount || 0) + 1;
+                                referralUser.referrals = [...(referralUser.referrals || []), newUser._id];
+                                await referralUser.save();
+                            }
+
                             return newUser;
                         }
                     } else if (credentials?.method === 'tg-pass') {
