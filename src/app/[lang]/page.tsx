@@ -9,6 +9,7 @@ import ProfileModal from './components/ProfileModal';
 import UserStats from './components/UserStats';
 import DailyProgress from './components/DailyProgress';
 import BottomNavigation from './components/BottomNavigation';
+import AirdropButton from '@/components/AirdropButton';
 
 import ReferralModal from './components/ReferralModal';
 
@@ -215,19 +216,19 @@ export default function Home() {
                 onRules={() => setIsRulesModalOpen(true)}
                 onAbout={() => setIsAboutModalOpen(true)}
                 onSupport={() =>  setIsReferralModalOpen(true)}
-
             />
+
+            {/* Airdrop Button */}
+            <AirdropButton />
 
             {/* Modals */}
             <TopEarnersModal
                 isOpen={isTopEarnersModalOpen}
                 onClose={() => setIsTopEarnersModalOpen(false)}
-
             />
             <RulesModal
                 isOpen={isRulesModalOpen}
                 onClose={() => setIsRulesModalOpen(false)}
-
             />
             <AboutModal
                 isOpen={isAboutModalOpen}
@@ -248,7 +249,6 @@ export default function Home() {
             <WithdrawalModal
                 isOpen={isWithdrawalModalOpen}
                 onClose={() => setIsWithdrawalModalOpen(false)}
-
             />
 
   
