@@ -3,17 +3,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLoading } from '../../../providers/LoadingProvider';
 
+interface DirectLinks {
+    link1: string;
+    link2: string;
+}
+
 export default function MainContent() {
-    const [balance, setBalance] = useState<string>('0.000');
+    const [balance, setBalance] = useState<number>(0);
     const [adCount, setAdCount] = useState<number>(0);
     const [isCountdownVisible, setIsCountdownVisible] = useState<boolean>(false);
-    const [timer, setTimer] = useState<number>(15);
+    const [timer, setTimer] = useState<number>(0);
     const [isAutoMode, setIsAutoMode] = useState<boolean>(false);
-    const [directLinks, setDirectLinks] = useState<{ link1: string; link2: string }>({ link1: '', link2: '' });
     const [error, setError] = useState<string | null>(null);
-    const { showLoading, hideLoading } = useLoading();
-    const autoAdIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
-    const countdownIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
+    const [directLinks, setDirectLinks] = useState<DirectLinks>({ link1: '', link2: '' });
+    const { setLoading } = useLoading();
+    const autoAdIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const fetchUserState = useCallback(async () => {
         try {
@@ -65,13 +70,12 @@ export default function MainContent() {
             }
 
             countdownIntervalRef.current = setInterval(() => {
-                setTimer((prevTimer) => {
+                setTimer((prevTimer: number) => {
                     if (prevTimer <= 1) {
                         if (countdownIntervalRef.current) {
                             clearInterval(countdownIntervalRef.current);
                         }
                         setIsCountdownVisible(false);
-                        setTimer(15);
                         return 0;
                     }
                     return prevTimer - 1;
@@ -82,12 +86,34 @@ export default function MainContent() {
             setError(errorMessage);
             console.error('Error showing ad:', error);
         } finally {
-            hideLoading();
+            setLoading(false);
         }
     };
 
+    const startCountdown = () => {
+        setIsCountdownVisible(true);
+        setTimer(15);
+
+        if (countdownIntervalRef.current) {
+            clearInterval(countdownIntervalRef.current);
+        }
+
+        countdownIntervalRef.current = setInterval(() => {
+            setTimer((prevTimer: number) => {
+                if (prevTimer <= 1) {
+                    if (countdownIntervalRef.current) {
+                        clearInterval(countdownIntervalRef.current);
+                    }
+                    setIsCountdownVisible(false);
+                    return 0;
+                }
+                return prevTimer - 1;
+            });
+        }, 1000);
+    };
+
     const startAutoAds = () => {
-        setIsAutoMode((prev) => !prev);
+        setIsAutoMode((prev: boolean) => !prev);
     };
 
     useEffect(() => {
@@ -150,12 +176,12 @@ export default function MainContent() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="text-base sm:text-xl font-bold text-yellow-400 text-center bg-black p-4 rounded-xl">
+                <div className="grid grid-cols-2 gap-4 bg-black-900/50 p-4 rounded-xl">
+                    <div className="text-base sm:text-xl font-bold text-yellow-400 text-center">
                         Balance
                         <div className="text-lg sm:text-2xl">${balance}</div>
                     </div>
-                    <div className="text-base sm:text-xl font-bold text-emerald-400 text-center bg-white p-4 rounded-xl">
+                    <div className="text-base sm:text-xl font-bold text-emerald-400 text-center">
                         Total Ads
                         <div className="text-lg sm:text-2xl">{adCount}</div>
                     </div>

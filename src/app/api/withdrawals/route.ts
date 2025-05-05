@@ -6,6 +6,21 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import WithdrawalHistory from '@/models/WithdrawalHistory';
 
+interface Withdrawal {
+    _doc: {
+        _id: string;
+        userId: string;
+        amount: number;
+        method: string;
+        recipient: string;
+        status: string;
+        createdAt: Date;
+    };
+    method: string;
+    amount: number;
+    telegramId?: string;
+}
+
 // Constants for conversion and fees
 const MIN_CRYPTO_AMOUNT = 50; // Minimum withdrawal amount
 const MAX_CRYPTO_AMOUNT = 1000; // Maximum withdrawal amount
@@ -73,119 +88,93 @@ function validateCryptoAddress(address: string, method: string): boolean {
     return true; // For non-crypto methods
 }
 
-export async function GET() {
+export async function GET(req: Request) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session?.user?.email) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
         await dbConnect();
-
-        const session: any = await getServerSession(authOptions);
-
-        console.log(session);
-        if (session.user?.role === 'admin') {
-            const withdrawals = await WithdrawalHistory.find({}).sort({ createdAt: -1 });
-            const withdrawalsWithConversion = withdrawals.map(w => ({
-                ...w._doc,
-                bdtAmount: w.method.toLowerCase() === 'bkash' || w.method.toLowerCase() === 'nagad'
-                    ? w.amount
-                    : w.amount * USD_TO_BDT_RATE
-            }));
-            return NextResponse.json({ result: withdrawalsWithConversion });
+        const user = await User.findOne({ email: session.user.email });
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        if (session && session.user?.role === 'user') {
-            const withdrawals = await WithdrawalHistory.find({ telegramId : session.user.telegramId }).sort({ createdAt: -1 });
-            const withdrawalsWithConversion = withdrawals.map(w => ({
-                ...w._doc,
-                bdtAmount: w.method.toLowerCase() === 'bkash' || w.method.toLowerCase() === 'nagad'
-                    ? w.amount
-                    : w.amount * USD_TO_BDT_RATE
-            }));
+        const withdrawals = await WithdrawalHistory.find({ userId: user._id })
+            .sort({ createdAt: -1 })
+            .limit(10);
 
-            return NextResponse.json({ result: withdrawalsWithConversion });
-        }
-
-    } catch (error: any) {
-        console.error(error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ withdrawals });
+    } catch (error) {
+        console.error('Error fetching withdrawals:', error);
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
 
 export async function POST(req: Request) {
     try {
         const session = await getServerSession(authOptions);
-        if (!session?.user) {
+        if (!session?.user?.email) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
-
-        const { amount, method, recipient } = await req.json();
-        const numAmount = parseFloat(amount);
-
-        if (isNaN(numAmount) || numAmount <= 0) {
-            return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
-        }
-
-        if (numAmount < MIN_CRYPTO_AMOUNT) {
-            return NextResponse.json(
-                { error: `Minimum withdrawal amount is ${MIN_CRYPTO_AMOUNT} BDT` },
-                { status: 400 }
-            );
-        }
-
-        if (numAmount > MAX_CRYPTO_AMOUNT) {
-            return NextResponse.json(
-                { error: `Maximum withdrawal amount is ${MAX_CRYPTO_AMOUNT} BDT` },
-                { status: 400 }
-            );
         }
 
         await dbConnect();
         const user = await User.findOne({ email: session.user.email });
-
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        const fee = calculateFee(numAmount, method);
-        const totalAmount = numAmount + fee;
+        const { amount, method, recipient } = await req.json();
 
-        if (user.balance < totalAmount) {
-            return NextResponse.json(
-                { error: 'Insufficient balance' },
-                { status: 400 }
-            );
+        if (!amount || !method || !recipient) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        }
+
+        const withdrawalAmount = parseFloat(amount);
+        if (isNaN(withdrawalAmount) || withdrawalAmount < MIN_CRYPTO_AMOUNT || withdrawalAmount > MAX_CRYPTO_AMOUNT) {
+            return NextResponse.json({ error: `Amount must be between ${MIN_CRYPTO_AMOUNT} and ${MAX_CRYPTO_AMOUNT} BDT` }, { status: 400 });
+        }
+
+        if (withdrawalAmount > user.balance) {
+            return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 });
+        }
+
+        const fee = calculateFee(withdrawalAmount, method);
+        const totalAmount = withdrawalAmount + fee;
+
+        if (totalAmount > user.balance) {
+            return NextResponse.json({ error: 'Insufficient balance to cover fee' }, { status: 400 });
+        }
+
+        if (method === 'bank' && !validateBangladeshiPhoneNumber(recipient)) {
+            return NextResponse.json({ error: 'Invalid bank account number' }, { status: 400 });
+        }
+
+        if (method !== 'bank' && !validateBangladeshiPhoneNumber(recipient)) {
+            return NextResponse.json({ error: 'Invalid phone number' }, { status: 400 });
         }
 
         const withdrawal = await WithdrawalHistory.create({
             userId: user._id,
-            amount: numAmount,
+            amount: withdrawalAmount,
             method,
             recipient,
             status: 'pending',
-            description: `Withdrawal request of ${numAmount} BDT via ${method}`,
-            metadata: {
-                ipAddress: req.headers.get('x-forwarded-for') || 'unknown',
-                deviceInfo: req.headers.get('user-agent') || 'unknown',
-                fee,
-                amountAfterFee: numAmount,
-                feeType: 'percentage'
-            }
+            fee
         });
 
-        // Update user balance
-        await User.findByIdAndUpdate(user._id, {
-            $inc: { balance: -totalAmount }
-        });
+        user.balance -= totalAmount;
+        await user.save();
 
         return NextResponse.json({
             success: true,
-            withdrawal,
-            newBalance: user.balance - totalAmount
+            message: 'Withdrawal request submitted successfully',
+            withdrawal
         });
     } catch (error) {
         console.error('Withdrawal error:', error);
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
 
